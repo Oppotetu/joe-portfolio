@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
+	import type { Project } from '$lib/types/project'
 	import '../app.postcss'
 	import { AppBar, LightSwitch, Modal, Drawer, getDrawerStore } from '@skeletonlabs/skeleton'
 	import type { DrawerSettings, DrawerStore } from '@skeletonlabs/skeleton'
@@ -9,7 +10,7 @@
 	const drawerStore = getDrawerStore()
 
 	export let data
-	let { projects } = data
+	let projects: Project[] = data.projects
 
 	// import function to register Swiper custom elements
 	import { register } from 'swiper/element/bundle'
@@ -28,7 +29,9 @@
 					<button
 						class="h4"
 						on:click={() => drawerStore.close()}
-						on:click={() => goto(`#${project.project}`)}>{project.title}</button
+						on:click={() =>
+							goto(`#${project.project}`, { replaceState: true, invalidateAll: true })}
+						>{project.title}</button
 					>
 				</li>
 			{/each}

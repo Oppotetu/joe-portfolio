@@ -7,8 +7,6 @@
 	import 'swiper/css/pagination'
 	import 'swiper/css/history'
 	import type { SwiperOptions } from 'swiper/types/swiper-options.js'
-	import type { PaginationOptions } from 'swiper/types/modules/pagination.js'
-	import type { NavigationOptions } from 'swiper/types/modules/navigation.js'
 	import { urlFor } from '$lib/config/images.js'
 	import { getDrawerStore, getModalStore } from '@skeletonlabs/skeleton'
 	import type { DrawerSettings, ModalComponent, ModalSettings } from '@skeletonlabs/skeleton'
@@ -19,22 +17,23 @@
 	const drawerStore = getDrawerStore()
 
 	export let data
-	let { projects } = data
+	let projects: Project[] = data.projects
 
-	const swiperParams1: SwiperOptions = {
+	const swiperParamsOuter: SwiperOptions = {
 		modules: [Navigation, Pagination, HashNavigation, Scrollbar, A11y],
 		direction: 'vertical',
 		spaceBetween: 8,
-		// pagination: {
-		// 	el: '.swiper-pagination',
-		// 	clickable: true,
-		// },
+		pagination: {
+			el: '.swiper-pagination',
+			clickable: true,
+		},
 		navigation: {
 			nextEl: '.down-b',
 			prevEl: '.up-b',
 		},
 		keyboard: true,
 		scrollbar: true,
+		mousewheel: true,
 		// nested: true,
 		// centeredSlides: true,
 		// centeredSlidesBounds: true,
@@ -44,58 +43,29 @@
 		},
 	}
 
-	const swiperParams2: SwiperOptions = {
+	const swiperParamsInner: SwiperOptions = {
 		modules: [Navigation, Pagination],
 		spaceBetween: 8,
-		// freeMode: true,
-		// pagination: {
-		// 	el: '.swiper-pagination',
-		// 	clickable: true,
-		// },
+		pagination: {
+			el: '.swiper-pagination',
+			clickable: true,
+		},
 		navigation: {
 			nextEl: '.next-b',
 			prevEl: '.prev-b',
 		},
 		keyboard: true,
-		// nested: true,
-		slidesPerView: 2,
+		slidesPerView: 'auto',
+		slidesPerGroupAuto: true,
 	}
 
 	let swiper: Swiper
 	let swiper2: Swiper
 
-	let lastScrollTop = 0
-	let isScrollingDown = false
-
 	onMount(() => {
-		var swiper = new Swiper('.my-swiper', swiperParams1)
+		swiper = new Swiper('.my-swiper-outer', swiperParamsOuter)
 
-		var swiper2 = new Swiper('.my-swiper-2', swiperParams2)
-
-		document.addEventListener('keydown', function (event) {
-			if (event.key === 'ArrowDown') {
-				swiper.slideNext()
-			} else if (event.key === 'ArrowUp') {
-				swiper.slidePrev()
-			} else if (event.key === 'ArrowRight') {
-				// console.log(swiper2)
-			} else if (event.key === 'ArrowLeft') {
-				// swiper2.slidePrev() // causes error
-			}
-		})
-		// const swiperElement = document.getElementById('my-swiper')
-		// swiperElement.addEventListener('scroll', function (event) {
-		// 	console.log('scrolling')
-		// 	const currentScrollTop = window.scrollY || document.documentElement.scrollTop
-
-		// 	isScrollingDown = currentScrollTop > lastScrollTop
-
-		// 	lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop
-
-		// 	if (isScrollingDown) {
-		// 		console.log('scrolled down')
-		// 	}
-		// })
+		swiper2 = new Swiper('.my-swiper-inner', swiperParamsInner)
 	})
 
 	const getModalComponent = (project: Project) => {
@@ -109,7 +79,6 @@
 		}
 		return modalComponent
 	}
-
 	const modalOpen = (project: Project) => {
 		const modal: ModalSettings = {
 			type: 'component',
@@ -135,76 +104,28 @@
 	}
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
 	<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-element-bundle.min.js"></script>
-</svelte:head>
+</svelte:head> -->
 
-<!-- <button on:click={drawerOpen} class="absolute top-2 left-2 z-10 h3">Joey_Crakc</button> -->
-
-<!-- <div class="space-x-4 overflow-scroll flex flex-col h-full">
-	{#each projects as project}
-		<div id={`${project.project}`} class="">
-			<div class="swiper my-swiper-2 h-full w-full">
-				<div class="swiper-wrapper">
-					<button class="absolute top-2 right-2 z-10" on:click={() => modalOpen(project)}
-						>Project</button
-					>0
-					{#each project.gallery as image}
-						<img
-							class="h-screen max-w-full object-contain swiper-slide"
-							src={image && urlFor(image.image).url()}
-							alt={image.slug}
-						/>
-					{/each}
-				</div>
-				<div class="swiper-pagination" />
-
-				<button class="swiper-button-prev prev-b" />
-				<button class="swiper-button-next next-b" />
-			</div>
-		</div>
-	{/each}
-</div> -->
-
-<swiper-container
-	class="my-swiper-o swiper-v"
-	pagination="true"
-	pagination-clickable="true"
-	space-between="50"
-	direction="vertical"
-	on:swiper={(e) => (swiper = e.detail[0])}
->
-	<swiper-slide>Horizontal Slide 1</swiper-slide>
-	<swiper-slide>
-		<swiper-container
-			class="my-swiper-o-2 swiper-h"
-			pagination="true"
-			pagination-clickable="true"
-			space-between="50"
-		>
-			<swiper-slide>Vertical Slide 1</swiper-slide>
-			<swiper-slide>Vertical Slide 2</swiper-slide>
-			<swiper-slide>Vertical Slide 3</swiper-slide>
-			<swiper-slide>Vertical Slide 4</swiper-slide>
-			<swiper-slide>Vertical Slide 5</swiper-slide>
-		</swiper-container>
-	</swiper-slide>
-	<swiper-slide>Horizontal Slide 3</swiper-slide>
-	<swiper-slide>Horizontal Slide 4</swiper-slide>
-</swiper-container>
-
-<!-- <div class="swiper my-swiper swiper-v h-full max-h-screen w-full">
+<div class="swiper my-swiper-outer h-full max-h-screen w-full">
+	<button
+		on:click={drawerOpen}
+		class=" bg-white text-7xl border-4 mix-blend-difference absolute top-1 left-1 z-50 trns-text"
+		>Joey_Crakc</button
+	>
+	<div class="shape w-full h-44 absolute top-0 left-0 bg-white" />
 	<div class="swiper-wrapper">
 		{#each projects as project}
 			<div data-hash={project.project} class="swiper-slide">
-				<div class="swiper my-swiper-2 swiper-h h-full w-full">
+				<button class="absolute top-2 right-2 z-10" on:click={() => modalOpen(project)}
+					>Project</button
+				>
+				<div class="swiper my-swiper-inner h-max w-full">
 					<div class="swiper-wrapper">
-						<button class="absolute top-2 right-2 z-10" on:click={() => modalOpen(project)}
-							>Project</button
-						>
 						{#each project.gallery as image}
 							<img
-								class="h-screen max-w-full object-contain swiper-slide"
+								class="max-h-screen h-max max-w-fit w-max swiper-slide"
 								src={image && urlFor(image.image).url()}
 								alt={image.slug}
 							/>
@@ -221,43 +142,25 @@
 	<div class="swiper-pagination" />
 	<button class="swiper-button-prev up-b" />
 	<button class="swiper-button-next down-b" />
-</div> -->
+</div>
 
 <style>
-	html,
-	body {
-		position: relative;
-		height: 100%;
-	}
-
-	body {
-		background: #eee;
-		font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-		font-size: 14px;
-		color: #000;
-		margin: 0;
-		padding: 0;
-	}
-
-	swiper-container {
-		width: 100%;
-		height: 100%;
-	}
-
-	swiper-slide {
+	.trns-text {
+		/* background: url(https://www.yachtandboat.com/wp-content/uploads/2018/12/hero-image-2.jpg) -20px -20px
+			no-repeat; */
+		-webkit-text-fill-color: transparent;
+		-webkit-background-clip: text;
+		background-clip: text;
+		/* Below is not needed */
+		/* display: block; */
+		/* font-size: 200px; */
+		font-weight: 300;
+		font-family: arial;
 		text-align: center;
-		font-size: 18px;
-		background: #fff;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	swiper-slide img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		/* margin-top: -20px; */
+		/* font-weight: bold; */
+		/* letter-spacing: -25px; */
+		/* background-size: cover; */
 	}
 
 	.swiper-button-prev,
