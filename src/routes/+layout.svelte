@@ -12,10 +12,10 @@
 	export let data
 	let projects: Project[] = data.projects
 
-	// import function to register Swiper custom elements
-	import { register } from 'swiper/element/bundle'
-	// register Swiper custom elements
-	register()
+	// // import function to register Swiper custom elements
+	// import { register } from 'swiper/element/bundle'
+	// // register Swiper custom elements
+	// register()
 </script>
 
 <Modal />
@@ -23,7 +23,6 @@
 	{#if $drawerStore.id === 'menu'}
 		<ul class="list p-4 space-y-2">
 			<li><a href="/">Instagram</a></li>
-			<li class="float-right pt-2"><LightSwitch /></li>
 			{#each projects as project}
 				<li>
 					<button
