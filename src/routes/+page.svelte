@@ -207,7 +207,7 @@
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="max-h-screen h-max max-w-screen w-max swiper-slide my-auto mx-auto"
+								class="max-h-screen h-max max-w-fit w-max swiper-slide my-auto"
 								src={image && urlFor(image.image).url()}
 								alt={image.slug}
 							/>
@@ -268,7 +268,8 @@
 
 	@media (max-width: 500px) {
 		.swiper-button-next,
-		.swiper-button-prev {
+		.swiper-button-prev,
+		.circle {
 			visibility: hidden;
 		}
 	}
