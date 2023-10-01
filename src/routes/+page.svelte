@@ -1,17 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import Swiper from 'swiper'
-	import { HashNavigation, Navigation, Pagination, History, Scrollbar, A11y } from 'swiper/modules'
+	import {
+		HashNavigation,
+		Navigation,
+		Pagination,
+		Scrollbar,
+		A11y,
+		Keyboard,
+		Mousewheel,
+	} from 'swiper/modules'
 	import 'swiper/css'
 	import 'swiper/css/navigation'
 	import 'swiper/css/pagination'
-	import 'swiper/css/history'
 	import type { SwiperOptions } from 'swiper/types/swiper-options.js'
 	import { urlFor } from '$lib/config/images.js'
-	import { getDrawerStore, getModalStore } from '@skeletonlabs/skeleton'
+	import { Drawer, getDrawerStore, getModalStore } from '@skeletonlabs/skeleton'
 	import type { DrawerSettings, ModalComponent, ModalSettings } from '@skeletonlabs/skeleton'
 	import ProjectModal from '$lib/components/ProjectModal.svelte'
 	import type { Project } from '$lib/types/project.js'
+	import Icon from '@iconify/svelte'
+	import { goto } from '$app/navigation'
 
 	const modalStore = getModalStore()
 	const drawerStore = getDrawerStore()
@@ -20,7 +29,7 @@
 	let projects: Project[] = data.projects
 
 	const swiperParamsOuter: SwiperOptions = {
-		modules: [Navigation, Pagination, HashNavigation, Scrollbar, A11y],
+		modules: [Navigation, Pagination, HashNavigation, Scrollbar, A11y, Keyboard, Mousewheel],
 		direction: 'vertical',
 		spaceBetween: 8,
 		pagination: {
@@ -44,7 +53,7 @@
 	}
 
 	const swiperParamsInner: SwiperOptions = {
-		modules: [Navigation, Pagination],
+		modules: [Navigation, Pagination, Keyboard],
 		spaceBetween: 8,
 		pagination: {
 			el: '.swiper-pagination',
@@ -67,31 +76,29 @@
 		swiper2 = new Swiper('.my-swiper-inner', swiperParamsInner)
 
 		var circle = document.querySelector('.circle')
-		// var box = document.querySelector('.down-b')
-		var up: Element | null = document.querySelector('.up-b')
-		var down: Element | null = document.querySelector('.down-b')
-		var prev: Element | null = document.querySelector('.prev-b')
-		var next: Element | null = document.querySelector('.next-b')
+		var boxes = document.querySelectorAll('.box')
 
 		document.addEventListener('mousemove', function (event) {
-			if (
-				up?.contains(event.target) ||
-				down?.contains(event.target) ||
-				next?.contains(event.target) ||
-				prev?.contains(event.target)
-			) {
-				circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+			var isInBox = false
+
+			// Check if the event target is inside any of the boxes
+			for (var i = 0; i < boxes.length; i++) {
+				if (boxes[i].contains(event.target)) {
+					isInBox = true
+					break
+				}
+			}
+
+			if (isInBox) {
+				if (circle) {
+					circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+				}
 			} else {
-				circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
+				if (circle) {
+					circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
+				}
 			}
 		})
-
-		// down.addEventListener('mouseenter', function () {
-		// 	circle.style.display = 'block'
-		// })
-		// down.addEventListener('mouseleave', function () {
-		// 	circle.style.display = 'none'
-		// })
 	})
 
 	const getModalComponent = (project: Project) => {
@@ -122,7 +129,7 @@
 		bgBackdrop: 'bg-gradient-to-tr from-surface-500/50 via-surface-500/50 to-surface-500/50',
 		width: 'w-[280px] md:w-[480px]',
 		// padding: 'p-4',
-		// rounded: 'rounded-md',
+		rounded: 'rounded-none',
 	}
 
 	const drawerOpen = () => {
@@ -130,20 +137,39 @@
 	}
 </script>
 
+<Drawer>
+	{#if $drawerStore.id === 'menu'}
+		<ul class="list p-4 space-y-2">
+			<li><button>Info</button></li>
+			<li><a href="/">Instagram</a></li>
+			{#each projects as project}
+				<li>
+					<button
+						class="h4"
+						on:click={() => drawerStore.close()}
+						on:click={() =>
+							goto(`#${project.project}`, { replaceState: true, invalidateAll: true })}
+						>{project.title}</button
+					>
+				</li>
+			{/each}
+		</ul>
+	{/if}
+</Drawer>
+
 <div class="circle" />
 <div class="shape" />
+<button on:click={drawerOpen} class="lg:text-7xl text-5xl border-4 top-1 left-1 z-30 inverted-text"
+	>Johannes</button
+>
 
 <div class="swiper my-swiper-outer h-full max-h-screen w-full">
-	<button
-		on:click={drawerOpen}
-		class="lg:text-7xl text-5xl border-4 top-1 left-1 z-50 inverted-text">Johannes Ørn</button
-	>
 	<div class="swiper-wrapper">
 		{#each projects as project}
 			<div data-hash={project.project} class="swiper-slide">
-				<button class="absolute top-2 right-2 z-10" on:click={() => modalOpen(project)}
-					>Project</button
-				>
+				<button class="absolute top-2 right-2 z-10" on:click={() => modalOpen(project)}>
+					<Icon icon="ph:plus-bold" width="30" height="30" />
+				</button>
 				<div class="swiper my-swiper-inner h-max w-full">
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
@@ -156,15 +182,15 @@
 					</div>
 					<div class="swiper-pagination" />
 
-					<button class="prev-b swiper-button-prev" />
-					<button class="next-b swiper-button-next" />
+					<button class="prev-b swiper-button-prev box" />
+					<button class="next-b swiper-button-next box" />
 				</div>
 			</div>
 		{/each}
 	</div>
 	<div class="swiper-pagination" />
-	<button class="up-b swiper-button-prev" />
-	<button class="down-b swiper-button-next" />
+	<button class="up-b swiper-button-prev box" />
+	<button class="down-b swiper-button-next box" />
 </div>
 
 <!-- cursor: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="45" height="45" viewBox="0 0 512 512"%3E%3Cg transform="rotate(0 256 256)"%3E%3Cpath fill="currentColor" d="M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208s208-93.13 208-208S370.87 48 256 48Zm107.31 259.31a16 16 0 0 1-22.62 0L256 222.63l-84.69 84.68a16 16 0 0 1-22.62-22.62l96-96a16 16 0 0 1 22.62 0l96 96a16 16 0 0 1 0 22.62Z"%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E')
@@ -253,7 +279,6 @@ pointer;  -->
 		transform: translate(-50%);
 		width: 20rem;
 		height: 7rem;
-		background-color: bisque;
 	}
 
 	.up-b {
@@ -270,7 +295,6 @@ pointer;  -->
 		transform: translateY(-50%);
 		width: 6rem;
 		height: 20rem;
-		background-color: aquamarine;
 	}
 
 	.prev-b {
