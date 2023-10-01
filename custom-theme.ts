@@ -4,8 +4,8 @@ export const CustomTheme: CustomThemeConfig = {
 	name: 'custom-theme',
 	properties: {
 		/* =~= Theme Properties =~= */
-		'--theme-font-family-base': `system-ui`,
-		'--theme-font-family-heading': `system-ui`,
+		'--theme-font-family-base': `'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif`,
+		'--theme-font-family-heading': `'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif`,
 		'--theme-font-color-base': '0 0 0',
 		'--theme-font-color-dark': '255 255 255',
 		'--theme-rounded-base': '9999px',

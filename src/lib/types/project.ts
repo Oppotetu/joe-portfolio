@@ -1,4 +1,5 @@
 export type Project = {
+	index: number
 	project: string
 	gallery: {
 		image: string

@@ -2,7 +2,11 @@
 	import type { Project } from '$lib/types/project'
 
 	export let project: Project
-	// let { title, authors, oppsummering, publisert, squareFootage } = project
+
+	const serverDate = project.publisert
+	const dateObj = new Date(serverDate)
+	const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' }
+	const formattedDate = dateObj.toLocaleDateString('en-US', dateOptions)
 </script>
 
 <div class="flex flex-col p-4">
@@ -16,12 +20,13 @@
 			{/each}
 		</div>
 	{/if}
-	<!-- {#if oppsummering}
-  <p>{oppsummering}</p>
-  {/if} -->
 	<br />
-	{#if project.publisert}
-		<p>Publication date: {project.publisert}</p>
+	{#if project.oppsummering}
+		<p>{project.oppsummering}</p>
+	{/if}
+	<br />
+	{#if formattedDate}
+		<p>Publication date: {formattedDate}</p>
 	{/if}
 	{#if project.squareFootage}
 		<p>Square Footage: {project.squareFootage}</p>
