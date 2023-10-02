@@ -207,7 +207,7 @@
 						{#each project.gallery as image}
 							<img
 								class="max-h-screen h-max max-w-fit w-max swiper-slide my-auto"
-								src={image && urlFor(image.image).auto('format').url()}
+								src={image && urlFor(image.image).auto('format').fit('max').url()}
 								alt={image.slug}
 							/>
 						{/each}
