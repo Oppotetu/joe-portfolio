@@ -189,7 +189,6 @@
 </Drawer>
 
 <div class="circle" />
-<!-- <div class="shape" /> -->
 <button
 	on:click={drawerOpen}
 	class="lg:text-7xl md:text-5xl text-3xl border-4 top-1 left-1 z-30 inverted-text">Johannes</button
@@ -239,15 +238,6 @@
 		/* font-family: fantasy; */
 		text-align: center;
 	}
-
-	/* .shape {
-		width: 100%;
-		height: 100%;
-		top: 0%;
-		left: 0%;
-		background-color: white;
-		position: absolute;
-	} */
 
 	.circle {
 		position: fixed;
