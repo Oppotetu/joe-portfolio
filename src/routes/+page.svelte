@@ -20,7 +20,6 @@
 	import ProjectModal from '$lib/components/ProjectModal.svelte'
 	import type { Project } from '$lib/types/project.js'
 	import Icon from '@iconify/svelte'
-	import { goto } from '$app/navigation'
 	import InfoModal from '$lib/components/InfoModal.svelte'
 
 	const modalStore = getModalStore()
@@ -28,6 +27,8 @@
 
 	export let data
 	let projects: Project[] = data.projects
+
+	console.log(projects)
 
 	const swiperParamsOuter: SwiperOptions = {
 		modules: [Navigation, Pagination, HashNavigation, Scrollbar, A11y, Keyboard, Mousewheel],
@@ -208,7 +209,7 @@
 						{#each project.gallery as image}
 							<img
 								class="max-h-screen h-max max-w-fit w-max swiper-slide my-auto"
-								src={image && urlFor(image.image).url()}
+								src={image && urlFor(image.image).auto('format').url()}
 								alt={image.slug}
 							/>
 						{/each}
