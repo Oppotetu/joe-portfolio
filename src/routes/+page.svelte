@@ -28,8 +28,6 @@
 	export let data
 	let projects: Project[] = data.projects
 
-	console.log(projects)
-
 	const swiperParamsOuter: SwiperOptions = {
 		modules: [Navigation, Pagination, HashNavigation, Scrollbar, A11y, Keyboard, Mousewheel],
 		direction: 'vertical',
@@ -191,7 +189,7 @@
 </Drawer>
 
 <div class="circle" />
-<div class="shape" />
+<!-- <div class="shape" /> -->
 <button
 	on:click={drawerOpen}
 	class="lg:text-7xl md:text-5xl text-3xl border-4 top-1 left-1 z-30 inverted-text">Johannes</button
@@ -242,14 +240,14 @@
 		text-align: center;
 	}
 
-	.shape {
+	/* .shape {
 		width: 100%;
 		height: 100%;
 		top: 0%;
 		left: 0%;
 		background-color: white;
 		position: absolute;
-	}
+	} */
 
 	.circle {
 		position: fixed;
