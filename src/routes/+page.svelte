@@ -83,12 +83,12 @@
 
 			// Check if the event target is inside any of the boxes
 
-			boxes.forEach((el) => {
-				if (el.contains(event.target)) {
-					isInBox = true
-					return
-				}
-			})
+			// boxes.forEach((el) => {
+			// 	if (el.contains(event.target)) {
+			// 		isInBox = true
+			// 		return
+			// 	}
+			// })
 
 			// for (var i = 0; i < boxes.length; i++) {
 			// 	if (boxes[i].contains(event.target)) {
@@ -97,15 +97,15 @@
 			// 	}
 			// }
 
-			if (isInBox) {
-				if (circle) {
-					circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
-				}
-			} else {
-				if (circle) {
-					circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
-				}
-			}
+			// if (isInBox) {
+			// 	if (circle) {
+			// 		circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+			// 	}
+			// } else {
+			// 	if (circle) {
+			// 		circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
+			// 	}
+			// }
 		})
 	})
 
