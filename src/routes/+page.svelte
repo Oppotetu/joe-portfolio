@@ -1,35 +1,40 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import Swiper from 'swiper'
-	import {
-		HashNavigation,
-		Navigation,
-		Pagination,
-		Scrollbar,
-		A11y,
-		Keyboard,
-		Mousewheel,
-	} from 'swiper/modules'
+	// import Swiper from 'swiper/swiper-bundle'
+	// import 'swiper/css/bundle'
+	// import { register } from 'swiper/element/bundle'
+	// import {
+	// 	HashNavigation,
+	// 	Navigation,
+	// 	Pagination,
+	// 	Scrollbar,
+	// 	A11y,
+	// 	Keyboard,
+	// 	Mousewheel,
+	// } from 'swiper/modules'
 	import 'swiper/css'
 	import 'swiper/css/navigation'
 	import 'swiper/css/pagination'
+	import type Swiper from 'swiper/types/swiper-class.js'
 	import type { SwiperOptions } from 'swiper/types/swiper-options.js'
 	import { urlFor } from '$lib/config/images.js'
 	import { Drawer, getDrawerStore, getModalStore } from '@skeletonlabs/skeleton'
 	import type { DrawerSettings, ModalComponent, ModalSettings } from '@skeletonlabs/skeleton'
 	import ProjectModal from '$lib/components/ProjectModal.svelte'
 	import type { Project } from '$lib/types/project.js'
-	import Icon from '@iconify/svelte'
 	import InfoModal from '$lib/components/InfoModal.svelte'
 
 	const modalStore = getModalStore()
 	const drawerStore = getDrawerStore()
 
+	// register()
+
 	export let data
 	let projects: Project[] = data.projects
+	// let dataFetched: boolean = false
 
 	const swiperParamsOuter: SwiperOptions = {
-		modules: [Navigation, Pagination, HashNavigation, Scrollbar, A11y, Keyboard, Mousewheel],
+		// modules: [Navigation, Pagination, HashNavigation, Keyboard, Mousewheel],
 		direction: 'vertical',
 		spaceBetween: 8,
 		pagination: {
@@ -41,19 +46,18 @@
 			prevEl: '.up-b',
 		},
 		keyboard: true,
-		scrollbar: false,
 		mousewheel: true,
 		// nested: true,
 		// centeredSlides: true,
 		// centeredSlidesBounds: true,
 		// slidesPerView: 2,
-		hashNavigation: {
-			watchState: true,
-		},
+		// hashNavigation: {
+		// 	watchState: true,
+		// },
 	}
 
 	const swiperParamsInner: SwiperOptions = {
-		modules: [Navigation, Pagination, Keyboard],
+		// modules: [Navigation, Pagination, Keyboard],
 		spaceBetween: 8,
 		pagination: {
 			el: '.swiper-pagination',
@@ -70,42 +74,52 @@
 
 	let swiper: Swiper
 	let swiper2: Swiper
+	// let swiperElOuter
 
 	onMount(() => {
+		// swiperElOuter = document.querySelector('outer-container')
+		// const swiperElInner: any = document.getElementsByClassName('inner-container')
+
+		// Object.assign(swiperElOuter, swiperParamsOuter)
+		// swiperElOuter?.initialize()
+
+		// swiperElInner.forEach((el: any) => {
+		// 	Object.assign(el, swiperParamsInner)
+		// 	swiperElInner?.initialize()
+		// })
+
 		swiper = new Swiper('.my-swiper-outer', swiperParamsOuter)
 		swiper2 = new Swiper('.my-swiper-inner', swiperParamsInner)
 
 		var circle = document.querySelector<HTMLElement>('.circle')
+		if (circle) {
+			circle.style.transform = 'translate(-9999px, -9999px)'
+		}
 		var boxes = document.querySelectorAll<HTMLElement>('.box')
-
 		document.addEventListener('mousemove', function (event) {
 			var isInBox = false
-
 			// Check if the event target is inside any of the boxes
-
-			// boxes.forEach((el) => {
-			// 	if (el.contains(event.target)) {
-			// 		isInBox = true
-			// 		return
-			// 	}
-			// })
-
+			boxes?.forEach((el: any) => {
+				if (el.contains(event.target)) {
+					isInBox = true
+					return
+				}
+			})
 			// for (var i = 0; i < boxes.length; i++) {
 			// 	if (boxes[i].contains(event.target)) {
 			// 		isInBox = true
 			// 		break
 			// 	}
 			// }
-
-			// if (isInBox) {
-			// 	if (circle) {
-			// 		circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
-			// 	}
-			// } else {
-			// 	if (circle) {
-			// 		circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
-			// 	}
-			// }
+			if (isInBox) {
+				if (circle) {
+					circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+				}
+			} else {
+				if (circle) {
+					circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
+				}
+			}
 		})
 	})
 
@@ -121,7 +135,10 @@
 		return modalComponent
 	}
 
-	const projectModalOpen = (project: Project) => {
+	const projectModalOpen = () => {
+		let activeId = swiper.activeIndex
+		console.log(activeId)
+		let project = projects.filter((i) => i.index === activeId)[0]
 		const projectModal: ModalSettings = {
 			type: 'component',
 			component: getProjectModal(project),
@@ -164,8 +181,6 @@
 	}
 </script>
 
-<!-- goto(`#${project.project}`, { replaceState: true, invalidateAll: true }) -->
-
 <Drawer>
 	{#if $drawerStore.id === 'menu'}
 		<ul class="list p-4 space-y-2">
@@ -194,37 +209,103 @@
 	class="lg:text-7xl md:text-5xl text-3xl border-4 top-1 left-1 z-30 inverted-text">Johannes</button
 >
 
-<div class="swiper my-swiper-outer h-full max-h-screen w-full">
+<button
+	class="absolute lg:text-7xl md:text-5xl text-3xl top-2 right-2 z-30 inverted-text"
+	on:click={projectModalOpen}
+>
+	+
+</button>
+
+<!-- <swiper-container
+	class="outer-container"
+	direction={'vertical'}
+	space-between={8}
+	pagination={{
+		el: '.swiper-pagination',
+	}}
+	navigation={{
+		nextEl: '.down-b',
+		prevEl: '.up-b',
+	}}
+	keyboard={true}
+	mousewheel={true}
+>
+	{#each projects as project (project.index)}
+		<swiper-slide>
+			<swiper-container
+				space-between={8}
+				pagination={{
+					el: '.swiper-pagination',
+				}}
+				keyboard={true}
+				slider-per-view={'auto'}
+				slider-per-group-auto={true}
+			>
+				{#each project.gallery as image}
+					<swiper-slide class="max-w-fit" lazy={true}>
+						<img
+							class="block h-full w-full max-h-max"
+							src={image.image && urlFor(image.image).fit('clip').quality(5).url()}
+							alt={image.slug}
+							loading={'lazy'}
+						/>
+					</swiper-slide>
+				{/each}
+			</swiper-container>
+		</swiper-slide>
+		<div class="swiper-pagination" />
+	{/each}
+	<button class="swiper-button-prev up-b box" />
+	<button class="swiper-button-next down-b box" />
+</swiper-container> -->
+
+<div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
 	<div class="swiper-wrapper">
-		{#each projects as project (project.index)}
-			<div data-hash={project.project} class="swiper-slide">
-				<button class="absolute top-2 right-2 z-10" on:click={() => projectModalOpen(project)}>
-					<Icon icon="ph:plus-bold" width="30" height="30" />
-				</button>
-				<div class="swiper my-swiper-inner h-max w-full">
+		{#each projects as project}
+			<div class="swiper-slide">
+				<div class="swiper my-swiper-inner swiper-v h-full w-full max-h-fit">
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="max-h-screen h-max max-w-fit w-max swiper-slide my-auto"
-								src={image && urlFor(image.image).auto('format').fit('max').url()}
-								alt={image.slug}
+								class="swiper-slide max-h-screen h-max max-w-fit w-max"
+								src={image && urlFor(image.image).quality(25).url()}
+								loading="lazy"
+								alt={image.slug && image.slug}
 							/>
 						{/each}
 					</div>
 					<div class="swiper-pagination" />
-
-					<button class="prev-b swiper-button-prev box" />
-					<button class="next-b swiper-button-next box" />
+					<button class="swiper-button-prev prev-b box" />
+					<button class="swiper-button-next next-b box" />
 				</div>
 			</div>
 		{/each}
 	</div>
 	<div class="swiper-pagination" />
-	<button class="up-b swiper-button-prev box" />
-	<button class="down-b swiper-button-next box" />
+	<button class="swiper-button-prev up-b box" />
+	<button class="swiper-button-next down-b box" />
 </div>
 
+<!-- 
+class="swiper-slide max-h-screen h-max max-w-fit w-max" 
+class="swiper-slide block h-full w-full max-w-max max-h-max"
+-->
+
 <style>
+	/* swiper-container {
+		width: 100%;
+		height: 100%;
+	}
+
+	swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		background: #fff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	} */
+
 	.inverted-text {
 		-webkit-text-fill-color: transparent;
 		-webkit-background-clip: text;
@@ -233,9 +314,7 @@
 		mix-blend-mode: difference;
 		position: absolute;
 
-		/* font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
 		font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-		/* font-family: fantasy; */
 		text-align: center;
 	}
 

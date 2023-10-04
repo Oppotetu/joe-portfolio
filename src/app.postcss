@@ -3,46 +3,7 @@
 @tailwind utilities;
 @tailwind variants;
 
-/*place global styles here */
 html,
 body {
-	@apply h-full;
-}
-
-p {
-	font-size: 1.125rem /* 18px */;
-	line-height: 1.75rem /* 28px */;
-	font-family: var(--theme-font-family-heading);
-}
-
-@media (min-width: 768px) {
-	.p {
-		font-size: 1.25rem /* 20px */;
-		line-height: 1.75rem /* 28px */;
-	}
-}
-
-.hover-underline-animation {
-	display: inline-block;
-	position: relative;
-	/* color: #0087ca; */
-}
-
-.hover-underline-animation::after {
-	content: '';
-	position: absolute;
-	width: 100%;
-	transform: scaleX(0);
-	height: 2px;
-	bottom: 0;
-	left: 0;
-	/* background-color: @apply bg-surface-900-50-token; */
-	@apply bg-surface-900 dark:bg-surface-50;
-	transform-origin: bottom right;
-	transition: transform 0.25s ease-out;
-}
-
-.hover-underline-animation:hover::after {
-	transform: scaleX(1);
-	transform-origin: bottom left;
+	@apply h-full relative;
 }

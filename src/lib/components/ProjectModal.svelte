@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Project } from '$lib/types/project'
+	import { onMount } from 'svelte'
 
 	export let project: Project
 
@@ -7,6 +8,14 @@
 	const dateObj = new Date(serverDate)
 	const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' }
 	const formattedDate = dateObj.toLocaleDateString('en-US', dateOptions)
+
+	// onMount(() => {
+	// 	document.getElementById('modal-div')?.addEventListener('keydown', function (e) {
+	// 		if (e.key == 'ArrowDown') {
+	// 			console.log(e.key)
+	// 		}
+	// 	})
+	// })
 </script>
 
 <div class="flex flex-col p-4">

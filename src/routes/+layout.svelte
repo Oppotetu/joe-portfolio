@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss'
-	import { Modal } from '@skeletonlabs/skeleton'
+	import { Drawer, Modal } from '@skeletonlabs/skeleton'
 	import { initializeStores } from '@skeletonlabs/skeleton'
 
 	initializeStores()

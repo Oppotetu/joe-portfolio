@@ -6,6 +6,7 @@ export const load = async ({}) => {
 		const response = await client.fetch(`
       *[]{'project': slug.current, gallery[]{'image': asset._ref, 'slug': slug.current}, title, authors, oppsummering, publisert, squareFootage}
     `)
+
 		const filtered: Project[] = response.filter((i: any) => {
 			return Object.values(i).at(0) != null
 		})
