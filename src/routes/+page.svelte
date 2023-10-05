@@ -216,49 +216,6 @@
 	+
 </button>
 
-<!-- <swiper-container
-	class="outer-container"
-	direction={'vertical'}
-	space-between={8}
-	pagination={{
-		el: '.swiper-pagination',
-	}}
-	navigation={{
-		nextEl: '.down-b',
-		prevEl: '.up-b',
-	}}
-	keyboard={true}
-	mousewheel={true}
->
-	{#each projects as project (project.index)}
-		<swiper-slide>
-			<swiper-container
-				space-between={8}
-				pagination={{
-					el: '.swiper-pagination',
-				}}
-				keyboard={true}
-				slider-per-view={'auto'}
-				slider-per-group-auto={true}
-			>
-				{#each project.gallery as image}
-					<swiper-slide class="max-w-fit" lazy={true}>
-						<img
-							class="block h-full w-full max-h-max"
-							src={image.image && urlFor(image.image).fit('clip').quality(5).url()}
-							alt={image.slug}
-							loading={'lazy'}
-						/>
-					</swiper-slide>
-				{/each}
-			</swiper-container>
-		</swiper-slide>
-		<div class="swiper-pagination" />
-	{/each}
-	<button class="swiper-button-prev up-b box" />
-	<button class="swiper-button-next down-b box" />
-</swiper-container> -->
-
 <div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
 	<div class="swiper-wrapper">
 		{#each projects as project}
@@ -267,7 +224,7 @@
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="swiper-slide max-h-screen h-max max-w-fit w-max"
+								class="swiper-slide block object-fit-contain h-full w-fit max-w-fit max-h-full"
 								src={image && urlFor(image.image).quality(25).url()}
 								loading="lazy"
 								alt={image.slug && image.slug}
@@ -288,24 +245,10 @@
 
 <!-- 
 class="swiper-slide max-h-screen h-max max-w-fit w-max" 
-class="swiper-slide block h-full w-full max-w-max max-h-max"
+class="swiper-slide block h-full w-fit max-w-fit max-h-full"
 -->
 
 <style>
-	/* swiper-container {
-		width: 100%;
-		height: 100%;
-	}
-
-	swiper-slide {
-		text-align: center;
-		font-size: 18px;
-		background: #fff;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	} */
-
 	.inverted-text {
 		-webkit-text-fill-color: transparent;
 		-webkit-background-clip: text;
@@ -332,6 +275,10 @@ class="swiper-slide block h-full w-full max-w-max max-h-max"
 
 		background-color: white;
 		mix-blend-mode: difference;
+	}
+
+	.object-fit-contain {
+		object-fit: contain;
 	}
 
 	@media (max-width: 500px) {
