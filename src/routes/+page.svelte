@@ -37,6 +37,7 @@
 		// modules: [Navigation, Pagination, HashNavigation, Keyboard, Mousewheel],
 		direction: 'vertical',
 		spaceBetween: 8,
+		// loop: true,
 		pagination: {
 			el: '.swiper-pagination',
 			clickable: true,
@@ -47,18 +48,12 @@
 		},
 		keyboard: true,
 		mousewheel: true,
-		// nested: true,
-		// centeredSlides: true,
-		// centeredSlidesBounds: true,
-		// slidesPerView: 2,
-		// hashNavigation: {
-		// 	watchState: true,
-		// },
 	}
 
 	const swiperParamsInner: SwiperOptions = {
 		// modules: [Navigation, Pagination, Keyboard],
 		spaceBetween: 8,
+		loop: true,
 		pagination: {
 			el: '.swiper-pagination',
 			clickable: true,
@@ -69,25 +64,13 @@
 		},
 		keyboard: true,
 		slidesPerView: 'auto',
-		slidesPerGroupAuto: true,
+		// slidesPerGroupAuto: true,
 	}
 
 	let swiper: Swiper
 	let swiper2: Swiper
-	// let swiperElOuter
 
 	onMount(() => {
-		// swiperElOuter = document.querySelector('outer-container')
-		// const swiperElInner: any = document.getElementsByClassName('inner-container')
-
-		// Object.assign(swiperElOuter, swiperParamsOuter)
-		// swiperElOuter?.initialize()
-
-		// swiperElInner.forEach((el: any) => {
-		// 	Object.assign(el, swiperParamsInner)
-		// 	swiperElInner?.initialize()
-		// })
-
 		swiper = new Swiper('.my-swiper-outer', swiperParamsOuter)
 		swiper2 = new Swiper('.my-swiper-inner', swiperParamsInner)
 
@@ -224,9 +207,8 @@
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="swiper-slide block object-fit-contain h-full w-fit max-w-fit max-h-full"
+								class="swiper-slide object-fit-contain inline h-full w-fit max-w-fit max-h-full"
 								src={image && urlFor(image.image).quality(25).url()}
-								loading="lazy"
 								alt={image.slug && image.slug}
 							/>
 						{/each}
