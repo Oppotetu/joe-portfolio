@@ -35,6 +35,7 @@
 
 	const swiperParamsOuter: SwiperOptions = {
 		// modules: [Navigation, Pagination, HashNavigation, Keyboard, Mousewheel],
+		// virtual: true,
 		direction: 'vertical',
 		spaceBetween: 8,
 		// loop: true,
@@ -53,7 +54,7 @@
 	const swiperParamsInner: SwiperOptions = {
 		// modules: [Navigation, Pagination, Keyboard],
 		spaceBetween: 8,
-		loop: true,
+		// loop: true,
 		pagination: {
 			el: '.swiper-pagination',
 			clickable: true,
@@ -64,7 +65,6 @@
 		},
 		keyboard: true,
 		slidesPerView: 'auto',
-		// slidesPerGroupAuto: true,
 	}
 
 	let swiper: Swiper
@@ -100,7 +100,8 @@
 				}
 			} else {
 				if (circle) {
-					circle.style.transform = 'translate(-9999px, -9999px)' // Move the circle out of the viewport
+					// Move the circle out of the viewport
+					circle.style.transform = 'translate(-9999px, -9999px)'
 				}
 			}
 		})
@@ -207,7 +208,7 @@
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="swiper-slide object-fit-contain inline h-full w-fit max-w-fit max-h-full"
+								class="swiper-slide inline h-full w-fit max-w-fit max-h-full"
 								src={image && urlFor(image.image).quality(25).url()}
 								alt={image.slug && image.slug}
 							/>
@@ -257,10 +258,6 @@ class="swiper-slide block h-full w-fit max-w-fit max-h-full"
 
 		background-color: white;
 		mix-blend-mode: difference;
-	}
-
-	.object-fit-contain {
-		object-fit: contain;
 	}
 
 	@media (max-width: 500px) {
