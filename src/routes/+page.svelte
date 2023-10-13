@@ -23,6 +23,8 @@
 	import ProjectModal from '$lib/components/ProjectModal.svelte'
 	import type { Project } from '$lib/types/project.js'
 	import InfoModal from '$lib/components/InfoModal.svelte'
+	import Img from '@zerodevx/svelte-img'
+	import cat from '$lib/515884.jpg?as=run'
 
 	const modalStore = getModalStore()
 	const drawerStore = getDrawerStore()
@@ -200,6 +202,14 @@
 	+
 </button>
 
+<!-- {#each projects as project} -->
+<!-- {#each projects[0].gallery as image}
+	<p>{urlFor(image.image).maxHeight(1000).maxWidth(2000).url().concat('?as=run')}</p>
+	<img class="" src={image && urlFor(image.image).url().concat('?as=run')} alt="img" />
+{/each} -->
+<!-- {/each} -->
+<!-- <img class="w-full h-full" src={cat} alt="img" /> -->
+
 <div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
 	<div class="swiper-wrapper">
 		{#each projects as project}
@@ -208,8 +218,8 @@
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="swiper-slide inline h-full w-fit max-w-fit max-h-full"
-								src={image && urlFor(image.image).quality(25).url()}
+								class="swiper-slide inline h-max md:h-full w-full md:w-fit md:max-w-fit max-h-full"
+								src={image && urlFor(image.image).maxHeight(1000).maxWidth(2300).quality(10).url()}
 								alt={image.slug && image.slug}
 							/>
 						{/each}
