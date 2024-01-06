@@ -12,10 +12,11 @@
 	// 	Keyboard,
 	// 	Mousewheel,
 	// } from 'swiper/modules'
+	// import Swiper from 'swiper'
+	// import type Swiper from 'swiper/types/swiper-class.js'
 	import 'swiper/css'
 	import 'swiper/css/navigation'
 	import 'swiper/css/pagination'
-	import type Swiper from 'swiper/types/swiper-class.js'
 	import type { SwiperOptions } from 'swiper/types/swiper-options.js'
 	import { urlFor } from '$lib/config/images.js'
 	import { Drawer, getDrawerStore, getModalStore } from '@skeletonlabs/skeleton'
@@ -23,8 +24,8 @@
 	import ProjectModal from '$lib/components/ProjectModal.svelte'
 	import type { Project } from '$lib/types/project.js'
 	import InfoModal from '$lib/components/InfoModal.svelte'
-	import Img from '@zerodevx/svelte-img'
-	import cat from '$lib/515884.jpg?as=run'
+	import type { LoadEvent } from '@sveltejs/kit'
+	import type Swiper from 'swiper/types/swiper-class.js'
 
 	const modalStore = getModalStore()
 	const drawerStore = getDrawerStore()
@@ -33,7 +34,6 @@
 
 	export let data
 	let projects: Project[] = data.projects
-	// let dataFetched: boolean = false
 
 	const swiperParamsOuter: SwiperOptions = {
 		// modules: [Navigation, Pagination, HashNavigation, Keyboard, Mousewheel],
@@ -72,7 +72,43 @@
 	let swiper: Swiper
 	let swiper2: Swiper
 
+	function isElementInViewport(el: Element) {
+		var rect = el.getBoundingClientRect()
+		return (
+			rect.top >= 0 &&
+			rect.left >= 0 &&
+			rect.bottom <=
+				(window.innerHeight || document.documentElement.clientHeight) /* or $(window).height() */ &&
+			rect.right <=
+				(window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+		)
+	}
+
+	function sourceChange() {
+		var imgElements = document.getElementsByTagName('img')
+		for (let i of imgElements) {
+			if (i.getAttribute('data-src')) {
+				i?.setAttribute('src', i?.getAttribute('data-src'))
+			}
+		}
+	}
+
+	function tryImages(event: Event) {
+		const el = event.target as Element
+		if (isElementInViewport(el)) {
+			const dataSrc = el.getAttribute('data-src')
+			if (dataSrc) {
+				el.setAttribute('src', dataSrc)
+				// if (el.getAttribute('data-src')) {
+				//   el.setAttribute('src', el.getAttribute('data-src'))
+				// }
+			}
+		}
+	}
+
 	onMount(() => {
+		// window.addEventListener('load', sourceChange())
+
 		swiper = new Swiper('.my-swiper-outer', swiperParamsOuter)
 		swiper2 = new Swiper('.my-swiper-inner', swiperParamsInner)
 
@@ -123,7 +159,6 @@
 
 	const projectModalOpen = () => {
 		let activeId = swiper.activeIndex
-		console.log(activeId)
 		let project = projects.filter((i) => i.index === activeId)[0]
 		const projectModal: ModalSettings = {
 			type: 'component',
@@ -176,7 +211,7 @@
 				>
 			</li>
 			<li><a class="h3" href="/" on:click={() => drawerStore.close()}>INSTAGRAM</a></li>
-			{#each projects as project}
+			<!-- {#each projects as project}
 				<li>
 					<button
 						class="h3"
@@ -184,7 +219,7 @@
 						on:click={() => swiper.slideTo(project.index)}>{project.title}</button
 					>
 				</li>
-			{/each}
+			{/each} -->
 		</ul>
 	{/if}
 </Drawer>
@@ -202,25 +237,37 @@
 	+
 </button>
 
-<!-- {#each projects as project} -->
-<!-- {#each projects[0].gallery as image}
-	<p>{urlFor(image.image).maxHeight(1000).maxWidth(2000).url().concat('?as=run')}</p>
-	<img class="" src={image && urlFor(image.image).url().concat('?as=run')} alt="img" />
-{/each} -->
-<!-- {/each} -->
-<!-- <img class="w-full h-full" src={cat} alt="img" /> -->
+<div>
+	{#each data.lqips as project}
+		<div class="flex">
+			{#each project.gallery as image}
+				<img
+					class="h-screen w-full"
+					src={image.asset.metadata.lqip}
+					data-src={image.ref && urlFor(image.ref).maxHeight(1000).maxWidth(2300).quality(2).url()}
+					alt="something"
+					loading="lazy"
+					on:load={tryImages}
+				/>
+			{/each}
+		</div>
+	{/each}
+</div>
 
-<div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
+<!-- <div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
 	<div class="swiper-wrapper">
-		{#each projects as project}
+		{#each data.lqips as project}
 			<div class="swiper-slide">
 				<div class="swiper my-swiper-inner swiper-v h-full w-full max-h-fit">
 					<div class="swiper-wrapper">
 						{#each project.gallery as image}
 							<img
-								class="swiper-slide inline h-max md:h-full w-full md:w-fit md:max-w-fit max-h-full"
-								src={image && urlFor(image.image).maxHeight(1000).maxWidth(2300).quality(10).url()}
-								alt={image.slug && image.slug}
+								class="swiper-slide h-max md:h-full w-fit md:max-w-fit max-h-full"
+								src={image.asset.metadata.lqip}
+								data-src={image.ref &&
+									urlFor(image.ref).maxHeight(1000).maxWidth(2300).quality(2).url()}
+								alt={image.slug}
+								loading="lazy"
 							/>
 						{/each}
 					</div>
@@ -234,12 +281,7 @@
 	<div class="swiper-pagination" />
 	<button class="swiper-button-prev up-b box" />
 	<button class="swiper-button-next down-b box" />
-</div>
-
-<!-- 
-class="swiper-slide max-h-screen h-max max-w-fit w-max" 
-class="swiper-slide block h-full w-fit max-w-fit max-h-full"
--->
+</div> -->
 
 <style>
 	.inverted-text {

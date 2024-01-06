@@ -2,15 +2,48 @@ import { client } from '$lib/config/client'
 import type { Project } from '$lib/types/project.js'
 
 export const load = async ({}) => {
+	const countImages = async () => {
+		const response = await client.fetch(`
+      *[]{'imageCount': count()}
+    `)
+		// return response
+	}
+
+	const fetchImages = async () => {
+		const response = await client.fetch(`
+      *[]{
+        'count': count(gallery),
+        gallery[]{
+          'ref': asset._ref,
+          'slug': slug.current,
+          asset -> {
+            metadata{
+              blurHash,
+              lqip
+            }
+          }
+        }
+      }
+    `)
+		const filtered = response.filter((i: Object) => {
+			return Object.values(i)[0] != null
+		})
+		return filtered
+	}
+
 	const getProjects = async () => {
 		const response = await client.fetch(`
-      *[]{'project': slug.current, gallery[]{'image': asset._ref, 'slug': slug.current}, title, authors, oppsummering, publisert, squareFootage}
+      *[]{
+        'project': slug.current, 
+        title, 
+        authors, 
+        oppsummering, 
+        publisert, 
+        squareFootage}
     `)
-
 		const filtered: Project[] = response.filter((i: any) => {
 			return Object.values(i).at(0) != null
 		})
-
 		filtered.forEach((i, index) => Object.assign(i, { ['index']: index }))
 
 		// make ob of objects containing image, slug, project and index
@@ -35,6 +68,8 @@ export const load = async ({}) => {
 	}
 
 	return {
+		// imageCount: countImages(),
+		lqips: fetchImages(),
 		projects: getProjects(),
 	}
 }
