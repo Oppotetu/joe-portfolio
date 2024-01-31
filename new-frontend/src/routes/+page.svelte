@@ -36,6 +36,11 @@
                   <Drawer.Title>{project.title}</Drawer.Title>
                   <Drawer.Description>{project.oppsummering}</Drawer.Description>
                 </Drawer.Header>
+                <div>
+                  <!-- <p>{project.authors}</p> -->
+                  <p>{project.publisert}</p>
+                  <!-- <p>{project.squareFootage}</p> -->
+                </div>
               </Drawer.Content>
             </Drawer.Root>
           </Carousel.Item>
