@@ -225,6 +225,7 @@
 </Drawer>
 
 <div class="circle" />
+
 <button
 	on:click={drawerOpen}
 	class="lg:text-7xl md:text-5xl text-3xl border-4 top-1 left-1 z-30 inverted-text">Johannes</button
@@ -237,6 +238,7 @@
 	+
 </button>
 
+<!-- Test -->
 <div>
 	{#each data.lqips as project}
 		<div class="flex">
