@@ -238,25 +238,24 @@
 	+
 </button>
 
-<!-- Test -->
-<div>
-	{#each data.lqips as project}
-		<div class="flex">
-			{#each project.gallery as image}
-				<img
-					class="h-screen w-full"
-					src={image.asset.metadata.lqip}
-					data-src={image.ref && urlFor(image.ref).maxHeight(1000).maxWidth(2300).quality(2).url()}
-					alt="something"
-					loading="lazy"
-					on:load={tryImages}
-				/>
-			{/each}
-		</div>
-	{/each}
-</div>
+<!-- <div> -->
+<!-- 	{#each data.lqips as project} -->
+<!-- 		<div class="flex"> -->
+<!-- 			{#each project.gallery as image} -->
+<!-- 				<img -->
+<!-- 					class="h-screen w-full" -->
+<!-- 					src={image.asset.metadata.lqip} -->
+<!-- 					data-src={image.ref && urlFor(image.ref).maxHeight(1000).maxWidth(2300).quality(2).url()} -->
+<!-- 					alt="something" -->
+<!-- 					loading="lazy" -->
+<!-- 					on:load={tryImages} -->
+<!-- 				/> -->
+<!-- 			{/each} -->
+<!-- 		</div> -->
+<!-- 	{/each} -->
+<!-- </div> -->
 
-<!-- <div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
+<div class="swiper my-swiper-outer max-h-screen swiper-h h-full w-full">
 	<div class="swiper-wrapper">
 		{#each data.lqips as project}
 			<div class="swiper-slide">
@@ -283,7 +282,7 @@
 	<div class="swiper-pagination" />
 	<button class="swiper-button-prev up-b box" />
 	<button class="swiper-button-next down-b box" />
-</div> -->
+</div>
 
 <style>
 	.inverted-text {

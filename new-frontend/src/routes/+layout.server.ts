@@ -37,6 +37,7 @@ export const load = async () => {
         'slug': slug.current, 
         title, 
         gallery[]{
+          'ref': asset._ref,
           'slug': slug.current,
           asset -> {
             metadata{
@@ -44,7 +45,7 @@ export const load = async () => {
               lqip
             }
           }
-        },
+        }[0...2],
         authors, 
         oppsummering, 
         publisert, 

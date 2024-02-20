@@ -22,7 +22,7 @@ export const load = async ({}) => {
               lqip
             }
           }
-        }
+        }[0...1]
       }
     `)
 		const filtered = response.filter((i: Object) => {

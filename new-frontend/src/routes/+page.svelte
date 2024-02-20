@@ -1,58 +1,25 @@
 <script lang="ts">
-  import { page } from '$app/stores'
-  import * as Carousel from '$lib/components/ui/carousel/index.ts'
-  import * as Drawer from '$lib/components/ui/drawer/index.js'
+  import HomeEmblem from '$lib/components/HomeEmblem.svelte'
+  import Swiper from '$lib/components/Swiper.svelte'
   import type { Project } from '$lib/types/project.js'
 
   export let data
   let projects: Project[] = data.projects
-  // let galleries = data.gallery
+
+  let project = projects[0]
 </script>
 
 <!-- <pre> -->
 <!--   {JSON.stringify(data, null, 2)} -->
 <!-- </pre> -->
 
-<div class="flex">
-  <Carousel.Root
-    opts={{
-      align: 'start'
-      // slidesToScroll: 'auto'
-    }}
-    class="mt-auto"
-  >
-    <Carousel.Content>
-      {#each projects as project}
-        {#each project.gallery as gallery}
-          <Carousel.Item>
-            <Drawer.Root>
-              <Drawer.Trigger>
-                <!-- <a href={`${$page.url.origin}/${project.slug}`}> -->
-                <img class="slider-image" src={gallery.asset.metadata.lqip} alt={gallery.slug} />
-                <!-- </a> -->
-              </Drawer.Trigger>
-              <Drawer.Content>
-                <Drawer.Header>
-                  <Drawer.Title>{project.title}</Drawer.Title>
-                  <Drawer.Description>{project.oppsummering}</Drawer.Description>
-                </Drawer.Header>
-                <div>
-                  <!-- <p>{project.authors}</p> -->
-                  <p>{project.publisert}</p>
-                  <!-- <p>{project.squareFootage}</p> -->
-                </div>
-              </Drawer.Content>
-            </Drawer.Root>
-          </Carousel.Item>
-        {/each}
-      {/each}
-    </Carousel.Content>
-    <Carousel.Previous />
-    <Carousel.Next />
-  </Carousel.Root>
-</div>
+<HomeEmblem>JOHANNES</HomeEmblem>
 
-<!-- class="pl-1 md:basis-1/2 lg:basis-1/3" -->
+<button class="absolute lg:text-7xl md:text-5xl text-3xl top-2 right-2 z-30 inverted-text">
+  +
+</button>
+
+<Swiper {project}></Swiper>
 
 <style>
   .slider-image {

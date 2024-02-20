@@ -1,34 +1,41 @@
 <script lang="ts">
-  var circle = document.querySelector<HTMLElement>('.circle')
-  if (circle) {
-    circle.style.transform = 'translate(-9999px, -9999px)'
-  }
-  var boxes = document.querySelectorAll<HTMLElement>('.box')
-  document.addEventListener('mousemove', function (event) {
-    var isInBox = false
-    // Check if the event target is inside any of the boxes
-    boxes?.forEach((el: any) => {
-      if (el.contains(event.target)) {
-        isInBox = true
-        return
+  import { onMount } from 'svelte'
+
+  onMount(() => {
+    var circle = document.querySelector<HTMLElement>('.circle')
+
+    if (circle) {
+      circle.style.transform = 'translate(-9999px, -9999px)'
+    }
+
+    var boxes = document.querySelectorAll<HTMLElement>('.box')
+
+    document.addEventListener('mousemove', function (event) {
+      var isInBox = false
+      // Check if the event target is inside any of the boxes
+      boxes?.forEach((el: any) => {
+        if (el.contains(event.target)) {
+          isInBox = true
+          return
+        }
+      })
+      // for (var i = 0; i < boxes.length; i++) {
+      // 	if (boxes[i].contains(event.target)) {
+      // 		isInBox = true
+      // 		break
+      // 	}
+      // }
+      if (isInBox) {
+        if (circle) {
+          circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+        }
+      } else {
+        if (circle) {
+          // Move the circle out of the viewport
+          circle.style.transform = 'translate(-9999px, -9999px)'
+        }
       }
     })
-    // for (var i = 0; i < boxes.length; i++) {
-    // 	if (boxes[i].contains(event.target)) {
-    // 		isInBox = true
-    // 		break
-    // 	}
-    // }
-    if (isInBox) {
-      if (circle) {
-        circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
-      }
-    } else {
-      if (circle) {
-        // Move the circle out of the viewport
-        circle.style.transform = 'translate(-9999px, -9999px)'
-      }
-    }
   })
 </script>
 

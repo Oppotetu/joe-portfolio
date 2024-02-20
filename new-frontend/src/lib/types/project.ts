@@ -3,6 +3,7 @@ export type Project = {
   slug: string
   title: string
   gallery: {
+    ref: string
     slug: string
     asset: {
       metadata: {
