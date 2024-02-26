@@ -8,14 +8,16 @@
   export let project: Project
 </script>
 
-<swiper-container navigation={true} effect="fade" fade-effect-cross-fade={false}>
+<swiper-container keyboard={true} navigation={true} effect="fade" fade-effect-cross-fade={true}>
   {#each project.gallery as image}
-    <swiper-slide class="flex">
+    <swiper-slide class="grid place-items-center min-h-screen">
       <img
-        class="max-h-screen justify-center"
+        class="max-h-screen sm:max-w-screen-sm"
         src={image.ref && urlFor(image.ref).url()}
         alt={image.slug}
       />
     </swiper-slide>
   {/each}
 </swiper-container>
+
+<!-- effect="fade" -->

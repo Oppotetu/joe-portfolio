@@ -6,16 +6,16 @@
   export let data
   let projects: Project[] = data.projects
 
-  let project = projects[0]
+  let project = projects[1]
 </script>
 
 <!-- <pre> -->
 <!--   {JSON.stringify(data, null, 2)} -->
 <!-- </pre> -->
 
-<HomeEmblem>JOHANNES</HomeEmblem>
+<HomeEmblem></HomeEmblem>
 
-<button class="absolute lg:text-7xl md:text-5xl text-3xl top-2 right-2 z-30 inverted-text">
+<button class="absolute lg:text-7xl md:text-5xl text-3xl top-0 right-2 z-30 inverted-text">
   +
 </button>
 

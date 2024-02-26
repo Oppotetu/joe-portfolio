@@ -45,7 +45,7 @@ export const load = async () => {
               lqip
             }
           }
-        }[0...2],
+        }[0...4],
         authors, 
         oppsummering, 
         publisert, 
