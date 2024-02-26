@@ -1,7 +1,6 @@
 <script lang="ts">
 	import HomeEmblem from '$lib/components/HomeEmblem.svelte'
 	import Swiper from '$lib/components/Swiper.svelte'
-	import FlowbiteCarousel from '$lib/components/FlowbiteCarousel.svelte'
 	import type { Project } from '$lib/types/project.js'
 	// import { lake } from '../../../assets/lake.jpg'
 	// import { ship } from '../../../assets/ship.jpg'
@@ -23,7 +22,6 @@
 </button>
 
 <Swiper {project}></Swiper>
-<!-- <FlowbiteCarousel {images} /> -->
 
 <!-- <style> -->
 <!-- 	.slider-image { -->
