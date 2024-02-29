@@ -1,5 +1,5 @@
-import { client } from '$lib/config/client';
-import type { Project } from '$lib/types/project.js';
+import { client } from '$lib/config/client'
+import type { Project } from '$lib/types/project.js'
 
 export const load = async () => {
 	const proRes: Project[] = await client.fetch(`
@@ -15,20 +15,20 @@ export const load = async () => {
               lqip
             }
           }
-        }[0...4],
+        }[0...3],
         authors, 
         oppsummering, 
         publisert, 
         squareFootage}
-    `);
+    `)
 	const projects: Project[] = proRes.filter((i: any) => {
-		return Object.values(i).at(0) != null;
-	});
-	projects.forEach((i, index) => Object.assign(i, { ['index']: index }));
+		return Object.values(i).at(0) != null
+	})
+	projects.forEach((i, index) => Object.assign(i, { ['index']: index }))
 
 	return {
 		// imageCount: countImages(),
 		// gallery: gallery,
 		projects: projects
-	};
-};
+	}
+}
