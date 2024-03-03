@@ -1,11 +1,20 @@
 <script lang="ts">
-	import { Drawer, Button, CloseButton } from 'flowbite-svelte'
+	import { Drawer, CloseButton } from 'flowbite-svelte'
 	import { sineIn } from 'svelte/easing'
 	import type { Project } from '$lib/types/project'
 	import type { Writable } from 'svelte/store'
+	import { page } from '$app/stores'
+	import type { ProjectList } from '$lib/types/projectList'
+	import { goto } from '$app/navigation'
 
-	export let projects: Project[]
-	export let projectStore: Writable<number>
+	export let projectList: ProjectList
+	// export let projectStore: Writable<string>
+	const searchParams = new URLSearchParams()
+
+	function go(projectSlug: string) {
+		searchParams.set('project', projectSlug)
+		goto(`?${searchParams.toString()}`)
+	}
 
 	let hidden = true
 	let transitionParams = {
@@ -30,16 +39,17 @@
 		</li>
 		<li><a class="text-xl font-bold" href="/">INSTAGRAM</a></li>
 
-		{#each projects as project}
+		{#each projectList as project}
 			<li>
-				<button
-					on:click={() => (hidden = true)}
-					on:click={() => projectStore.set(project.index)}
-					class="text-xl font-bold">{project.title}</button
+				<a href="?project={project.slug}" on:click={() => (hidden = true)} class="text-xl font-bold"
+					>{project.title}</a
 				>
 			</li>
 		{/each}
 	</ul>
+
+	<!-- on:click={() => projectStore.set(project.slug)}
+					on:click={() => $page.url.searchParams.set('project', project.slug)} -->
 
 	<!-- <div class="flex items-center"> -->
 	<!-- 	<h5 -->

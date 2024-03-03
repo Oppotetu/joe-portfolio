@@ -306,7 +306,6 @@
 		pointer-events: none;
 		transform: translate(-50%, -50%);
 
-		-webkit-background-clip: border-box;
 		background-clip: border-box;
 
 		background-color: white;

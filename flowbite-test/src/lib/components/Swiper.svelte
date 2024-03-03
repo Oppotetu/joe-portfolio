@@ -3,82 +3,72 @@
 	import type { Project } from '$lib/types/project'
 	import { onMount } from 'svelte'
 	import { register } from 'swiper/element/bundle'
-	import Cursor from './Cursor.svelte'
-	import prevSvg from '$lib/assets/ooui--previous-ltr.svg'
-	import nextSvg from '$lib/assets/ooui--previous-rtl.svg'
+
+	import Swiper from 'swiper'
+	import { Navigation, Pagination } from 'swiper/modules'
+	import 'swiper/css'
+	import 'swiper/css/navigation'
+	import { fade } from 'svelte/transition'
 
 	register()
 
 	export let project: Project
 
-	// let mouseX = 0
-	// let mouseY = 0
-
-	// function handleMouseMove(event) {
-	// 	mouseX = event.clientX
-	// 	mouseY = event.clientY
-	// }
-
-	// let circle: HTMLElement
-
 	onMount(() => {
-		// circle = document.querySelector('circle')
+		const swiper = new Swiper('.swiper', {
+			modules: [Navigation],
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev'
+			},
+			keyboard: true
 
-		// if (circle) {
-		// 	circle.style.transform = 'translate(-9999px, -9999px)'
-		// }
-
-		// const container = document.querySelector('container')
-		const swiperEl = document.querySelector('swiper-container')
-		const prevButton = document.getElementById('prev-button')
-		const nextButton = document.getElementById('next-button')
-
-		prevButton.addEventListener('click', () => {
-			swiperEl.swiper.slidePrev()
-		})
-		nextButton.addEventListener('click', () => {
-			swiperEl.swiper.slideNext()
+			// effect: 'fade',
+			// fadeEffect: {
+			// 	crossFade: false
+			// }
 		})
 
-		// document.addEventListener('mousemove', function (event: MouseEvent) {
-		// 	const y = event.clientY
-		// 	const x = event.clientX
-		// 	circle.style.top = y + 'px'
-		// 	circle.style.left = x + 'px'
-		// 	circle.style.left = event.pageX + 'px'
-		// 	circle.style.top = event.pageY + 'px'
-		// 	var isInBox = false
-		// 	if (prevButton && prevButton.contains(event.target as Node)) {
-		// 		isInBox = true
-		// 	}
-		// 	if (isInBox) {
-		// 		circle.classList.add('show')
-		// 		circle.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
-		// 	} else {
-		// 		circle.classList.remove('show')
-		// 		circle.style.transform = 'translate(-9999px, -9999px)'
-		// 	}
+		// const swiperEl = document.querySelector('swiper-container')
+		// const prevButton = document.getElementById('prev-button')
+		// const nextButton = document.getElementById('next-button')
+
+		// prevButton.addEventListener('click', () => {
+		// 	swiperEl.swiper.slidePrev()
+		// })
+		// nextButton.addEventListener('click', () => {
+		// 	swiperEl.swiper.slideNext()
 		// })
 	})
 </script>
 
-<!-- <div class="circle" /> -->
-<!-- <div class="container h-full w-full relative">
-	<div class="circle"></div>
-</div> -->
+<div class="swiper w-full h-full">
+	<div class="swiper-wrapper">
+		{#each project.gallery as image}
+			<div class="swiper-slide flex items-center justify-center">
+				<img
+					class="max-h-screen block h-full object-cover mx-auto"
+					src={image.ref && urlFor(image.ref).quality(50).url()}
+					alt={image.slug}
+					loading="lazy"
+				/>
+			</div>
+		{/each}
+	</div>
 
-<!-- <div on:mousemove={handleMouseMove}>
-	<div class="circle" style="left: {mouseX}px; top: {mouseY}px;"></div>
-</div> -->
+	<button class="swiper-button-prev absolute"></button>
+	<button class="swiper-button-next absolute"></button>
+</div>
 
-<!-- <Cursor next={nextButton}></Cursor> -->
-
-<swiper-container keyboard={true} effect="fade" fade-effect-cross-fade={true}>
+<!-- <swiper-container class="w-full h-full" keyboard={true} navigation={true} effect="fade"
+	fade-effect={{
+		crossFade: false
+	}}>
 	{#each project.gallery as image}
-		<swiper-slide class="grid place-items-center min-h-screen">
+		<swiper-slide class="flex justify-center items-center">
 			<img
-				class="max-h-screen sm:max-w-screen-sm"
-				src={image.ref && urlFor(image.ref).url()}
+				class="max-h-screen block h-full object-cover"
+				src={image.ref && urlFor(image.ref).fit('max').quality(50).url()}
 				alt={image.slug}
 				loading="lazy"
 			/>
@@ -87,69 +77,54 @@
 
 	<button id="prev-button" class="prev-button absolute"></button>
 	<button id="next-button" class="next-button absolute"></button>
-</swiper-container>
+</swiper-container> -->
 
 <style>
-	.prev-button,
-	.next-button {
-		top: 7%;
-		width: 50%;
-		height: 93%;
-
-		/* cursor: none; */
-	}
-	.prev-button {
-		left: 0;
-		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='m4 10l9 9l1.4-1.5L7 10l7.4-7.5L13 1z'/%3E%3C/svg%3E"),
-			auto;
-		mix-blend-mode: difference;
-		/* background-color: white; */
-	}
-	.next-button {
-		right: 0;
-		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z'/%3E%3C/svg%3E"),
-			auto;
-		mix-blend-mode: difference;
-		/* background-color: white;  */
-	}
-
-	/* .circle {
-		position: absolute;
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		z-index: 9999;
-		user-select: none;
-		transform: translate(-50%, -50%);
-
-		background-clip: border-box;
-
-		mix-blend-mode: difference;
-		background-color: white;
-	} */
-
-	/* swiper-container::part(button-prev),
-	swiper-container::part(button-next) {
-		cursor: none;
-
-		top: 50%;
-		transform: translateY(-50%);
-		width: 6rem;
-		height: 100%;
-		background-color: aquamarine;
-	}
-
-	swiper-container::part(button-prev)::after,
-	swiper-container::part(button-next)::after {
+	.swiper-button-prev::after,
+	.swiper-button-next::after {
 		content: '';
 	}
 
-	swiper-container::part(button-prev) {
+	.swiper-button-prev,
+	.swiper-button-next {
+		width: 50%;
+		height: 93%;
+		top: 7%;
+		margin: 0;
+	}
+	.swiper-button-prev {
 		left: 0;
+		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='m4 10l9 9l1.4-1.5L7 10l7.4-7.5L13 1z'/%3E%3C/svg%3E"),
+			auto;
+	}
+	.swiper-button-next {
+		right: 0;
+		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z'/%3E%3C/svg%3E"),
+			auto;
 	}
 
+	/* swiper-container::part(button-next) {
+		display: none;
+		content: '';
+	}
+
+	swiper-container::part(button-prev),
+	swiper-container::part(button-next) {
+		width: 50%;
+		top: 7%;
+		height: 93%;
+		content: '';
+		
+	}
+	swiper-container::part(button-prev) {
+		left: 0;
+		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='m4 10l9 9l1.4-1.5L7 10l7.4-7.5L13 1z'/%3E%3C/svg%3E"),
+			auto;
+	}
 	swiper-container::part(button-next) {
 		right: 0;
+		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z'/%3E%3C/svg%3E"),
+			auto;
 	} */
 
 	/* @media (max-width: 500px) {
