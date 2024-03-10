@@ -5,22 +5,32 @@
 	import { register } from 'swiper/element/bundle'
 
 	import Swiper from 'swiper'
-	import { Navigation, Pagination } from 'swiper/modules'
+	import { Navigation } from 'swiper/modules'
 	import 'swiper/css'
 	import 'swiper/css/navigation'
-	import { fade } from 'svelte/transition'
 
 	register()
 
 	export let project: Project
 
+	// function recreateNode(el, withChildren?) {
+	// 	if (withChildren) {
+	// 		el.parentNode.replaceChild(el.cloneNode(true), el)
+	// 	} else {
+	// 		var newEl = el.cloneNode(false)
+	// 		while (el.hasChildNodes()) newEl.appendChild(el.firstChild)
+	// 		el.parentNode.replaceChild(newEl, el)
+	// 	}
+	// }
+
 	onMount(() => {
 		const swiper = new Swiper('.swiper', {
-			modules: [Navigation],
-			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev'
-			},
+			// modules: [Navigation],
+			// navigation: {
+			// 	nextEl: '.swiper-button-next',
+			// 	prevEl: '.swiper-button-prev'
+			// },
+			loop: true,
 			keyboard: true
 
 			// effect: 'fade',
@@ -29,16 +39,18 @@
 			// }
 		})
 
-		// const swiperEl = document.querySelector('swiper-container')
-		// const prevButton = document.getElementById('prev-button')
-		// const nextButton = document.getElementById('next-button')
+		// recreateNode(document.getElementById('swiper-button-prev'))
 
-		// prevButton.addEventListener('click', () => {
-		// 	swiperEl.swiper.slidePrev()
-		// })
-		// nextButton.addEventListener('click', () => {
-		// 	swiperEl.swiper.slideNext()
-		// })
+		// const swiperEl = document.querySelector('swiper-container')
+		const prevButton = document.getElementById('prev-button')
+		const nextButton = document.getElementById('next-button')
+
+		prevButton.addEventListener('click', () => {
+			swiper.slidePrev()
+		})
+		nextButton.addEventListener('click', () => {
+			swiper.slideNext()
+		})
 	})
 </script>
 
@@ -47,17 +59,16 @@
 		{#each project.gallery as image}
 			<div class="swiper-slide flex items-center justify-center">
 				<img
-					class="max-h-screen block h-full object-cover mx-auto"
+					class="max-w-[100vw] max-h-screen block h-full object-contain mx-auto"
 					src={image.ref && urlFor(image.ref).quality(50).url()}
-					alt={image.slug}
+					alt={image.slug && image.slug}
 					loading="lazy"
 				/>
 			</div>
 		{/each}
 	</div>
-
-	<button class="swiper-button-prev absolute"></button>
-	<button class="swiper-button-next absolute"></button>
+	<button id="prev-button" class="prev-button absolute"></button>
+	<button id="next-button" class="next-button absolute"></button>
 </div>
 
 <!-- <swiper-container class="w-full h-full" keyboard={true} navigation={true} effect="fade"
@@ -80,24 +91,27 @@
 </swiper-container> -->
 
 <style>
-	.swiper-button-prev::after,
-	.swiper-button-next::after {
+	.prev-button::after,
+	.next-button::after {
 		content: '';
 	}
 
-	.swiper-button-prev,
-	.swiper-button-next {
+	.prev-button,
+	.next-button {
 		width: 50%;
 		height: 93%;
 		top: 7%;
 		margin: 0;
+		z-index: 1;
 	}
-	.swiper-button-prev {
+
+	.prev-button {
 		left: 0;
 		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='m4 10l9 9l1.4-1.5L7 10l7.4-7.5L13 1z'/%3E%3C/svg%3E"),
 			auto;
 	}
-	.swiper-button-next {
+
+	.next-button {
 		right: 0;
 		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z'/%3E%3C/svg%3E"),
 			auto;
@@ -114,8 +128,8 @@
 		top: 7%;
 		height: 93%;
 		content: '';
-		
 	}
+
 	swiper-container::part(button-prev) {
 		left: 0;
 		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='m4 10l9 9l1.4-1.5L7 10l7.4-7.5L13 1z'/%3E%3C/svg%3E"),

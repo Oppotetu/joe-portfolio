@@ -3,7 +3,8 @@ import type { Project } from '$lib/types/project.js'
 import type { ProjectList } from '$lib/types/projectList'
 
 export const load = async ({ url }) => {
-	const projectSlug = url.searchParams.get('project') || '104-kiosk-buerkliplatz'
+	// const projectSlug = url.searchParams.get('project') || '104-kiosk-buerkliplatz'
+	const projectSlug = url.pathname.slice(1) || '104-kiosk-buerkliplatz'
 
 	// async function getProject(projectSlug: string) {
 	const project: Project = await client.fetch(
