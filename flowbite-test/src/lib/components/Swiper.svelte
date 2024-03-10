@@ -117,6 +117,13 @@
 			auto;
 	}
 
+	@media (max-width: 640px) {
+		.next-button,
+		.prev-button {
+			display: none;
+		}
+	}
+
 	/* swiper-container::part(button-next) {
 		display: none;
 		content: '';
@@ -139,13 +146,5 @@
 		right: 0;
 		cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 20 20'%3E%3Cpath fill='white' stroke='black' d='M7 1L5.6 2.5L13 10l-7.4 7.5L7 19l9-9z'/%3E%3C/svg%3E"),
 			auto;
-	} */
-
-	/* @media (max-width: 500px) {
-		.swiper-button-next,
-		.swiper-button-prev,
-		.circle {
-			visibility: hidden;
-		}
 	} */
 </style>

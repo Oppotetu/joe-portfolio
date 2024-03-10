@@ -1,40 +1,12 @@
 <script lang="ts">
 	import { sineIn } from 'svelte/easing'
-	// import type { Project } from '$lib/types/project'
-	// import type { Writable } from 'svelte/store'
-	import { page } from '$app/stores'
 	import type { ProjectList } from '$lib/types/projectList'
-	// import { goto } from '$app/navigation'
-	import {
-		Drawer,
-		CloseButton,
-		Sidebar,
-		SidebarGroup,
-		SidebarItem,
-		SidebarWrapper
-	} from 'flowbite-svelte'
+	import { Drawer, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte'
+	import { activeStore } from '$lib/utils/stores'
 
 	export let projectList: ProjectList
 
 	let hidden: boolean
-	let path = $page.url.pathname
-	let params = $page.url.searchParams.get('project')
-	let activeUrl: string
-
-	$: {
-		if (path && params) {
-			activeUrl = `${path}?project=${params}`
-			console.log(activeUrl)
-		}
-	}
-
-	// export let projectStore: Writable<string>
-	// const searchParams = new URLSearchParams()
-
-	// function go(projectSlug: string) {
-	// 	searchParams.set('project', projectSlug)
-	// 	goto(`?${searchParams.toString()}`)
-	// }
 
 	let transitionParams = {
 		x: -320,
@@ -50,10 +22,17 @@
 	JD
 </button>
 
-<Drawer transitionType="fly" {transitionParams} bind:hidden id="sidebar1">
-	<Sidebar {activeUrl}>
+<Drawer
+	class="border-r border-gray-200"
+	transitionType="fly"
+	backdrop={false}
+	{transitionParams}
+	bind:hidden
+	id="sidebar1"
+>
+	<Sidebar activeUrl={$activeStore} class="w-full">
 		<SidebarWrapper class="bg-white">
-			<SidebarGroup class="w-full">
+			<SidebarGroup>
 				<SidebarItem label="INFO" class="text-xl" on:click={() => (hidden = true)}></SidebarItem>
 				<SidebarItem label="INSTAGRAM" class="text-xl" on:click={() => (hidden = true)}
 				></SidebarItem>
@@ -63,18 +42,15 @@
 					<SidebarItem
 						label={project.title}
 						href={project.slug}
-						class="text-xl"
+						class="text-xl px-0"
 						on:click={() => (hidden = true)}
+						on:click={() => activeStore.set(project.slug)}
 					></SidebarItem>
 				{/each}
 			</SidebarGroup>
 		</SidebarWrapper>
 	</Sidebar>
 </Drawer>
-
-<!-- on:click={() => projectStore.set(project.slug)} -->
-<!-- on:click={() => $page.url.searchParams.set('project', project.slug)} -->
-<!-- <CloseButton on:click={() => (hidden = true)} class="mb-4 justify-self-end" /> -->
 
 <style>
 	.inverted-text {
